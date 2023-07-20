@@ -26,8 +26,8 @@
 			function changeChartType(chartType){
 				try {
 					console.info("set kieu chart "+chartType);
-					const chart = widget.chart();
-					chart.setChartType(chartType);
+					//const chart = widget.chart();
+					widget.activeChart().setChartType(chartType);
 				} catch (error) {
 					console.error("error set kieu chart " + error);
 				}

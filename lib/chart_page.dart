@@ -13,6 +13,8 @@ class ChartPage extends StatefulWidget {
 class _ChartPageState extends State<ChartPage> {
   late WebViewController controller;
   int _currentSegment = 0;
+
+  /// danh sách của kiểu Resolution
   final Map<int, Widget> _segments = {
     0: const Padding(
       padding: EdgeInsets.symmetric(horizontal: 10),
@@ -43,6 +45,14 @@ class _ChartPageState extends State<ChartPage> {
       child: Text('6M'),
     ),
   };
+  var chartType = 1;
+  final Map<String, int> _chartType = {
+    'Bar': 0,
+    'Candles': 1,
+    'Line': 2,
+    'Area': 3,
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,16 +78,28 @@ class _ChartPageState extends State<ChartPage> {
                   color: Colors.grey.shade700,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(3),
-                margin: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7), border: Border.all(color: Colors.grey)),
-                child: SvgPicture.asset(
-                  'assets/icons/icon_chart_candle.svg',
-                  height: 20,
-                  width: 20,
-                  color: Colors.grey.shade700,
+              GestureDetector(
+                onTap: () {
+                  chartType++;
+                  if (chartType == _chartType.length) {
+                    chartType = 0;
+                  }
+                  String script = "changeChartType($chartType);";
+                  controller.runJavascript(script);
+                  setState(() {});
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(color: Colors.grey)),
+                  child: SvgPicture.asset(
+                    'assets/icons/icon_chart_$chartType.svg',
+                    height: 20,
+                    width: 20,
+                    color: Colors.grey.shade700,
+                  ),
                 ),
               ),
               Container(
