@@ -11,6 +11,27 @@
 		<script type="text/javascript" src="datafeeds/udf/dist/bundle.js"></script>
 
 		<script type="text/javascript">
+			var interval = 'D';
+			var widget;
+			function changeResolution(resolution){
+				try {
+					console.info("set thoi gian "+resolution);
+					const chart = widget.chart();
+					chart.setResolution(resolution);
+				} catch (error) {
+					console.error("error set thoi gian " + error);
+				}
+			}
+
+			function changeChartType(chartType){
+				try {
+					console.info("set kieu chart "+chartType);
+					const chart = widget.chart();
+					chart.setChartType(chartType);
+				} catch (error) {
+					console.error("error set kieu chart " + error);
+				}
+			}
 
 			function getParameterByName(name) {
 				name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -26,24 +47,40 @@
 					datafeedUrl = customDataUrl.startsWith('https://') ? customDataUrl : `https://${customDataUrl}`;
 				}
 
-				var widget = new TradingView.widget({
+				widget = new TradingView.widget({
 					fullscreen: true,
 					symbol: 'AAPL',
-					interval: '1D',
+					interval: interval,
 					container: "tv_chart_container",
 					//	BEWARE: no trailing slash is expected in feed URL
 					datafeed: new Datafeeds.UDFCompatibleDatafeed(datafeedUrl),
 					library_path: "charting_library/",
 					locale: getParameterByName('lang') || "en",
-
-					disabled_features: ["use_localstorage_for_settings"],
+					enabled_features:[],
+					disabled_features: [
+						"header_widget",
+						"use_localstorage_for_settings",
+						"header_compare",
+                    	"header_screenshot",
+						"header_compare",
+						"header_undo_redo",
+						"header_saveload",
+						"header_settings",
+						"header_fullscreen_button",
+						"header_indicators"
+					],
 					preset: "mobile",
 					overrides: {
 						"paneProperties.background": "#222222",
-						"paneProperties.vertGridProperties.color": "#454545",
-						"paneProperties.horzGridProperties.color": "#454545",
+						"paneProperties.vertGridProperties.color": "#00000000",
+						"paneProperties.horzGridProperties.color": "#00000000",
 						"scalesProperties.textColor" : "#AAA"
 					}
+				});
+				widget.onChartReady(function (){
+					widget.headerReady().then(function(){
+						
+					});
 				});
 			};
 

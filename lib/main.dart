@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:local_notification/services/noti_service.dart';
-
 import 'chart_page.dart';
 
 final InAppLocalhostServer localhostServer = InAppLocalhostServer(port: 8888);
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const ChartPage(),
     );
   }
 }
