@@ -16,17 +16,22 @@
 			function changeResolution(resolution){
 				try {
 					console.info("set thoi gian "+resolution);
-					const chart = widget.chart();
-					chart.setResolution(resolution);
+					widget.activeChart().setResolution(resolution);
 				} catch (error) {
 					console.error("error set thoi gian " + error);
 				}
+			}
+			function removeStudies(){
+				widget.activeChart().removeAllStudies();
+				widget.activeChart().clearMarks();
+			}
+			function toggleVolumeLabel() {
+				
 			}
 
 			function changeChartType(chartType){
 				try {
 					console.info("set kieu chart "+chartType);
-					//const chart = widget.chart();
 					widget.activeChart().setChartType(chartType);
 				} catch (error) {
 					console.error("error set kieu chart " + error);
@@ -67,20 +72,19 @@
 						"header_saveload",
 						"header_settings",
 						"header_fullscreen_button",
-						"header_indicators"
+						"header_indicators",
 					],
 					preset: "mobile",
 					overrides: {
 						"paneProperties.background": "#222222",
 						"paneProperties.vertGridProperties.color": "#00000000",
 						"paneProperties.horzGridProperties.color": "#00000000",
-						"scalesProperties.textColor" : "#AAA"
-					}
+						"scalesProperties.textColor" : "#AAA",
+						"mainSeriesProperties.style": 0,
+					},
 				});
 				widget.onChartReady(function (){
-					widget.headerReady().then(function(){
-						
-					});
+					
 				});
 			};
 
