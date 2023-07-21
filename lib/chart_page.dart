@@ -137,7 +137,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         // String scrip = "toggleVolumeLabel()";
                                         // controller.runJavascript(scrip);
-                                        controller.runJavascript("removeStudies();");
+                                        controller.runJavascript("addVolumeLabel();");
                                       },
                                       child: Container(
                                         height: 25,
@@ -149,21 +149,35 @@ class _ChartPageState extends State<ChartPage> {
                                         child: const Center(child: Text('Volume')),
                                       ),
                                     ),
-                                    Container(
-                                      height: 25,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                          border: Border.all(color: Colors.grey.shade300)),
-                                      child: const Center(child: Text('RSI')),
+                                    GestureDetector(
+                                      onTap: () {
+                                        String script = "addRSI();";
+                                        controller.runJavascript(script);
+                                      },
+                                      child: Container(
+                                        height: 25,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
+                                            border: Border.all(color: Colors.grey.shade300)),
+                                        child: const Center(child: Text('RSI')),
+                                      ),
                                     ),
-                                    Container(
-                                      height: 25,
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(8)),
-                                          border: Border.all(color: Colors.grey.shade300)),
-                                      child: const Center(child: Text('Bol. Bands')),
+                                    GestureDetector(
+                                      onTap: () {
+                                        String script = "addBollingerBands();";
+                                        controller.runJavascript(script);
+                                      },
+                                      child: Container(
+                                        height: 25,
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
+                                            border: Border.all(color: Colors.grey.shade300)),
+                                        child: const Center(child: Text('Bol. Bands')),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -289,6 +303,11 @@ class _ChartPageState extends State<ChartPage> {
               onPageStarted: (url) {
                 print('on page started $url');
               },
+              onPageFinished: (url) {
+                String script = "removeStudies();";
+                controller.runJavascript(script);
+              },
+              zoomEnabled: false,
             ),
           ),
           const SizedBox(

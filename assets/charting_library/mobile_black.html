@@ -22,11 +22,41 @@
 				}
 			}
 			function removeStudies(){
-				widget.activeChart().removeAllStudies();
 				widget.activeChart().clearMarks();
+				widget.activeChart().removeAllStudies();
 			}
-			function toggleVolumeLabel() {
+			function addVolumeLabel() {
+				widget.activeChart().createStudy(
+					'Volume', 
+					false, 
+					false, 
+					{
+    					in_0: 20,
+    					in_1: 2,
+  					}, 
+					{
+						"%d.color" : "#FF0000"
+					}
+				);
+			}
+
+			function addRSI() {
 				
+			}
+
+			function addBollingerBands() {
+				widget.activeChart().createStudy(
+					'Bollinger Bands', 
+					false, 
+					false, 
+					{
+    					in_0: 20,
+    					in_1: 2,
+  					}, 
+					{
+						"%d.color" : "#FF0000"
+					}
+				);
 			}
 
 			function changeChartType(chartType){
@@ -81,6 +111,7 @@
 						"paneProperties.horzGridProperties.color": "#00000000",
 						"scalesProperties.textColor" : "#AAA",
 						"mainSeriesProperties.style": 0,
+						"paneProperties.legendProperties.showVolume": false,
 					},
 				});
 				widget.onChartReady(function (){
