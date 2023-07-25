@@ -39,6 +39,8 @@ dependencies:
   webview_flutter: ^3.0.4
   flutter_inappwebview: ^5.7.2+3
   flutter_svg: ^2.0.7
+  shorebird_code_push: ^1.1.0
+  restart_app: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +75,7 @@ flutter:
     - assets/charting_library/datafeeds/udf/lib/
     - assets/charting_library/datafeeds/udf/src/
     - assets/charting_library/datafeeds/udf/dist/
+    - shorebird.yaml
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
