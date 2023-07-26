@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:local_notification/constant.dart';
 import 'package:local_notification/services/noti_service.dart';
 import 'chart_page.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
@@ -44,15 +45,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: true,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
-        appBarTheme: AppBarTheme(backgroundColor: Theme.of(context).colorScheme.inversePrimary),
-        useMaterial3: true,
+    return ValueListenableBuilder(
+      valueListenable: Constant.isDark,
+      builder: (context, value, child) => MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: true,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.lightGreen,
+            brightness: value ? Brightness.dark : Brightness.light,
+          ),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
@@ -187,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onTap: () => Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => const TestPage(),
+                      builder: (context) => const SettingPage(),
                     )),
                 child: Text(
                   'Shorebird Engine not available.',
@@ -237,9 +243,14 @@ class _LoadingIndicator extends StatelessWidget {
   }
 }
 
-class TestPage extends StatelessWidget {
-  const TestPage({super.key});
+class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
 
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -247,10 +258,13 @@ class TestPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
-          child: FilledButton.icon(
-        onPressed: () {},
-        icon: const Icon(Icons.local_dining),
-        label: const Text('Click'),
+          child: Switch(
+        onChanged: (value) {
+          setState(() {
+            Constant.isDark.value = value;
+          });
+        },
+        value: Constant.isDark.value,
       )),
     );
   }

@@ -319,7 +319,6 @@ class _ChartPageState extends State<ChartPage> {
             height: 5,
           ),
           CupertinoSlidingSegmentedControl(
-            backgroundColor: Colors.grey.shade100,
             thumbColor: Colors.green,
             groupValue: _currentSegment,
             children: _segments,
