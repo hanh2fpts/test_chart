@@ -22,41 +22,61 @@
 				}
 			}
 			function removeStudies(){
-				widget.activeChart().clearMarks();
-				widget.activeChart().removeAllStudies();
+				//widget.activeChart().clearMarks();
+				//widget.activeChart().removeAllStudies();
 			}
-			function addVolumeLabel() {
+			function addVolumeLabel(isShow) {
+				//console.log("asssssssssssssssssssssssssssssssss"+isShow);
+				if(isShow){
+					widget.activeChart().createStudy(
+						'Volume', 
+						true, 
+						false, 
+					);
+				}
+				else{
+					widget.activeChart().removeAllStudies();
+				}
+			}
+
+			function addRSI(isShow) {
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Relative Strength Index', 
+					false, 
+					false,
+					);
+				}
+				else{
+					widget.activeChart().removeAllStudies();
+				}
+			}
+
+			function addMA(value){
 				widget.activeChart().createStudy(
-					'Volume', 
-					false, 
-					false, 
+					'Moving Average',
+					true,
+					false,
 					{
-    					in_0: 20,
-    					in_1: 2,
-  					}, 
-					{
-						"%d.color" : "#FF0000"
-					}
+						'length': value
+					},
+					null
 				);
 			}
 
-			function addRSI() {
-				
-			}
-
-			function addBollingerBands() {
-				widget.activeChart().createStudy(
+			function addBollingerBands(isShow) {
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
 					'Bollinger Bands', 
-					false, 
-					false, 
-					{
-    					in_0: 20,
-    					in_1: 2,
-  					}, 
-					{
-						"%d.color" : "#FF0000"
-					}
-				);
+					true, 
+					false,
+					);
+				}
+				else{
+					widget.activeChart().removeAllStudies();
+				}
 			}
 
 			function changeChartType(chartType){
@@ -116,11 +136,12 @@
 						"paneProperties.horzGridProperties.color": "#00000000",
 						"scalesProperties.textColor" : "#AAA",
 						"mainSeriesProperties.style": 0,
-						"paneProperties.legendProperties.showVolume": false,
+						"paneProperties.legendProperties.showVolume": true,
 					},
 				});
 				widget.onChartReady(function (){
-					
+					widget.activeChart().clearMarks();
+					widget.activeChart().removeAllStudies();
 				});
 			};
 

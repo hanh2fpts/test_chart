@@ -260,6 +260,9 @@ class _SettingPageState extends State<SettingPage> {
       body: Center(
           child: Switch(
         onChanged: (value) {
+          var noti = '';
+          value ? noti = 'Đã bật giao diện tối' : noti = 'Đã bật giao diện sáng';
+          NotificationService().showNotification(title: 'Thong báo', body: noti);
           setState(() {
             Constant.isDark.value = value;
           });
