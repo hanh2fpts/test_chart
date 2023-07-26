@@ -91,7 +91,10 @@
 					datafeed: new Datafeeds.UDFCompatibleDatafeed(datafeedUrl),
 					library_path: "charting_library/",
 					locale: getParameterByName('lang') || "en",
-					enabled_features:[],
+					enabled_features:[
+						"show_symbol_logos",
+						"show_symbol_logo_in_legend"
+					],
 					disabled_features: [
 						"header_widget",
 						"use_localstorage_for_settings",
@@ -103,6 +106,8 @@
 						"header_settings",
 						"header_fullscreen_button",
 						"header_indicators",
+						"legend_widget",
+						"chart_zoom"
 					],
 					preset: "mobile",
 					overrides: {

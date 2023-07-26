@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -301,7 +304,9 @@ class _ChartPageState extends State<ChartPage> {
                 this.controller = controller;
               },
               onPageStarted: (url) {
-                print('on page started $url');
+                if (kDebugMode) {
+                  print('on page started $url');
+                }
               },
               onPageFinished: (url) {
                 String script = "removeStudies();";
