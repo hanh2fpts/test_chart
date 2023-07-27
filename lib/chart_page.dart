@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:local_notification/constant.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ChartPage extends StatefulWidget {
@@ -55,15 +56,15 @@ class _ChartPageState extends State<ChartPage> {
     'Line': 2,
     'Area': 3,
   };
-  bool isShowVolume = false;
-  bool isShowRsi = false;
-  bool isShowBol = false;
-  bool isShowMA5 = false;
-  bool isShowMA10 = false;
-  bool isShowMA50 = false;
-  bool isShowMA100 = false;
-  bool isShowMA20 = false;
-  bool isShowMA200 = false;
+  ValueNotifier<bool> isShowVolume = ValueNotifier(false);
+  ValueNotifier<bool> isShowRsi = ValueNotifier(false);
+  ValueNotifier<bool> isShowBol = ValueNotifier(false);
+  ValueNotifier<bool> isShowMA5 = ValueNotifier(false);
+  ValueNotifier<bool> isShowMA10 = ValueNotifier(false);
+  ValueNotifier<bool> isShowMA50 = ValueNotifier(false);
+  ValueNotifier<bool> isShowMA100 = ValueNotifier(false);
+  ValueNotifier<bool> isShowMA20 = ValueNotifier(false);
+  ValueNotifier<bool> isShowMA200 = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +121,14 @@ class _ChartPageState extends State<ChartPage> {
                     context: context,
                     builder: (context) {
                       return Container(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width,
+                          height: 250,
                           decoration: const BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(5), topRight: Radius.circular(5))),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const Row(
                                   children: [Text('Các chỉ số'), Spacer(), CloseButton()],
@@ -140,55 +141,72 @@ class _ChartPageState extends State<ChartPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        isShowVolume = !isShowVolume;
-                                        controller.runJavascript("setVolume($isShowVolume);");
-                                        setState(() {});
+                                        isShowVolume.value = !isShowVolume.value;
+                                        controller
+                                            .runJavascript("setVolume(${isShowVolume.value});");
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300),
-                                            color: isShowVolume
-                                                ? Colors.green
-                                                : Theme.of(context).colorScheme.background),
-                                        child: const Center(
-                                          child: Text('Volume'),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowVolume,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          margin: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(
+                                            child: Text('Volume'),
+                                          ),
                                         ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        isShowRsi = !isShowRsi;
-                                        String script = "setRSI($isShowRsi);";
+                                        isShowRsi.value = !isShowRsi.value;
+                                        String script = "setRSI(${isShowRsi.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowRsi,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          decoration: BoxDecoration(
                                             borderRadius:
                                                 const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('RSI')),
+                                            border: Border.all(color: Colors.grey.shade300),
+                                            color: value
+                                                ? Colors.green
+                                                : Theme.of(context).colorScheme.background,
+                                          ),
+                                          child: const Center(child: Text('RSI')),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        isShowBol = !isShowBol;
-                                        String script = "setBollingerBands($isShowBol);";
+                                        isShowBol.value = !isShowBol.value;
+                                        String script = "setBollingerBands(${isShowBol.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('Bol. Bands')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowBol,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('Bol. Bands')),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -201,50 +219,69 @@ class _ChartPageState extends State<ChartPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        isShowMA5 = !isShowMA5;
-                                        String script = "setMA5($isShowMA5);";
+                                        isShowMA5.value = !isShowMA5.value;
+                                        String script = "setMA5(${isShowMA5.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('MA5')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowMA5,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          margin: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('MA5')),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        isShowMA10 = !isShowMA10;
-                                        String script = "setMA10($isShowMA10);";
+                                        isShowMA10.value = !isShowMA10.value;
+                                        String script = "setMA10(${isShowMA10.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('MA10')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowMA10,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('MA10')),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        isShowMA20 = !isShowMA20;
-                                        String script = "setMA20($isShowMA20);";
+                                        isShowMA20.value = !isShowMA20.value;
+                                        String script = "setMA20(${isShowMA20.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('MA20')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowMA20,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('MA20')),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -257,50 +294,69 @@ class _ChartPageState extends State<ChartPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        isShowMA50 = !isShowMA50;
-                                        String script = "setMA50($isShowMA50);";
+                                        isShowMA50.value = !isShowMA50.value;
+                                        String script = "setMA50(${isShowMA50.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('MA50')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowMA50,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          margin: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('MA50')),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        isShowMA100 = !isShowMA100;
-                                        String script = "setMA100($isShowMA100);";
+                                        isShowMA100.value = !isShowMA100.value;
+                                        String script = "setMA100(${isShowMA100.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('MA100')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowMA100,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('MA100')),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        isShowMA200 = !isShowMA200;
-                                        String script = "setMA200($isShowMA200);";
+                                        isShowMA200.value = !isShowMA200.value;
+                                        String script = "setMA200(${isShowMA200.value});";
                                         controller.runJavascript(script);
                                       },
-                                      child: Container(
-                                        height: 25,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(Radius.circular(8)),
-                                            border: Border.all(color: Colors.grey.shade300)),
-                                        child: const Center(child: Text('MA200')),
+                                      child: ValueListenableBuilder(
+                                        valueListenable: isShowMA200,
+                                        builder: (context, value, child) => Container(
+                                          height: 25,
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(Radius.circular(8)),
+                                              border: Border.all(color: Colors.grey.shade300),
+                                              color: value
+                                                  ? Colors.green
+                                                  : Theme.of(context).colorScheme.background),
+                                          child: const Center(child: Text('MA200')),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -326,16 +382,23 @@ class _ChartPageState extends State<ChartPage> {
                 ),
               ),
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(3),
-                margin: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7), border: Border.all(color: Colors.grey)),
-                child: SvgPicture.asset(
-                  'assets/icons/icon_setting.svg',
-                  height: 20,
-                  width: 20,
-                  color: Colors.grey.shade700,
+              GestureDetector(
+                onTap: () => showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const SettingChartWidget(),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(color: Colors.grey)),
+                  child: SvgPicture.asset(
+                    'assets/icons/icon_setting.svg',
+                    height: 20,
+                    width: 20,
+                    color: Colors.grey.shade700,
+                  ),
                 ),
               ),
               Container(
@@ -352,23 +415,24 @@ class _ChartPageState extends State<ChartPage> {
               ),
             ],
           ),
-          SizedBox(
-            height: 400,
-            child: WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: 'http://localhost:8888/assets/charting_library/mobile_black.html',
-              onWebViewCreated: (controller) {
-                this.controller = controller;
-              },
-              onPageStarted: (url) {
-                if (kDebugMode) {
-                  print('on page started $url');
-                }
-              },
-              onPageFinished: (url) {
-              
-              },
-              zoomEnabled: false,
+          ValueListenableBuilder(
+            valueListenable: Constant.chartHeight,
+            builder: (context, value, child) => SizedBox(
+              height: value,
+              child: WebView(
+                javascriptMode: JavascriptMode.unrestricted,
+                initialUrl: 'http://localhost:8888/assets/charting_library/mobile_black.html',
+                onWebViewCreated: (controller) {
+                  this.controller = controller;
+                },
+                onPageStarted: (url) {
+                  if (kDebugMode) {
+                    print('on page started $url');
+                  }
+                },
+                onPageFinished: (url) {},
+                zoomEnabled: false,
+              ),
             ),
           ),
           const SizedBox(
@@ -411,6 +475,48 @@ class _ChartPageState extends State<ChartPage> {
               });
             },
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingChartWidget extends StatefulWidget {
+  const SettingChartWidget({super.key});
+
+  @override
+  State<SettingChartWidget> createState() => _SettingChartWidgetState();
+}
+
+class _SettingChartWidgetState extends State<SettingChartWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      height: 200,
+      child: Column(
+        children: [
+          const Row(
+            children: [Spacer(), CloseButton()],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Chiều cao chart:'),
+              SizedBox(
+                width: 280,
+                child: Slider(
+                    min: 100,
+                    max: 500,
+                    value: Constant.chartHeight.value,
+                    onChanged: (value) {
+                      setState(() {
+                        Constant.chartHeight.value = value;
+                      });
+                    }),
+              )
+            ],
+          )
         ],
       ),
     );
