@@ -58,6 +58,13 @@ class _ChartPageState extends State<ChartPage> {
   bool isShowVolume = false;
   bool isShowRsi = false;
   bool isShowBol = false;
+  bool isShowMA5 = false;
+  bool isShowMA10 = false;
+  bool isShowMA50 = false;
+  bool isShowMA100 = false;
+  bool isShowMA20 = false;
+  bool isShowMA200 = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,7 +141,8 @@ class _ChartPageState extends State<ChartPage> {
                                     GestureDetector(
                                       onTap: () {
                                         isShowVolume = !isShowVolume;
-                                        controller.runJavascript("addVolumeLabel($isShowVolume);");
+                                        controller.runJavascript("setVolume($isShowVolume);");
+                                        setState(() {});
                                       },
                                       child: Container(
                                         height: 25,
@@ -146,13 +154,15 @@ class _ChartPageState extends State<ChartPage> {
                                             color: isShowVolume
                                                 ? Colors.green
                                                 : Theme.of(context).colorScheme.background),
-                                        child: const Center(child: Text('Volume')),
+                                        child: const Center(
+                                          child: Text('Volume'),
+                                        ),
                                       ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
                                         isShowRsi = !isShowRsi;
-                                        String script = "addRSI($isShowRsi);";
+                                        String script = "setRSI($isShowRsi);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
@@ -168,7 +178,7 @@ class _ChartPageState extends State<ChartPage> {
                                     GestureDetector(
                                       onTap: () {
                                         isShowBol = !isShowBol;
-                                        String script = "addBollingerBands($isShowBol);";
+                                        String script = "setBollingerBands($isShowBol);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
@@ -191,7 +201,8 @@ class _ChartPageState extends State<ChartPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        String script = "addMA(5);";
+                                        isShowMA5 = !isShowMA5;
+                                        String script = "setMA5($isShowMA5);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
@@ -205,29 +216,33 @@ class _ChartPageState extends State<ChartPage> {
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: (){
-                                        String script = "addMA(10);";
+                                      onTap: () {
+                                        isShowMA10 = !isShowMA10;
+                                        String script = "setMA10($isShowMA10);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
                                         height: 25,
                                         width: 100,
                                         decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
                                             border: Border.all(color: Colors.grey.shade300)),
                                         child: const Center(child: Text('MA10')),
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: (){
-                                        String script = "addMA(20);";
+                                      onTap: () {
+                                        isShowMA20 = !isShowMA20;
+                                        String script = "setMA20($isShowMA20);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
                                         height: 25,
                                         width: 100,
                                         decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
                                             border: Border.all(color: Colors.grey.shade300)),
                                         child: const Center(child: Text('MA20')),
                                       ),
@@ -241,43 +256,49 @@ class _ChartPageState extends State<ChartPage> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     GestureDetector(
-                                      onTap: (){
-                                        String script = "addMA(50);";
+                                      onTap: () {
+                                        isShowMA50 = !isShowMA50;
+                                        String script = "setMA50($isShowMA50);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
                                         height: 25,
                                         width: 100,
                                         decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
                                             border: Border.all(color: Colors.grey.shade300)),
                                         child: const Center(child: Text('MA50')),
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: (){
-                                        String script = "addMA(100);";
+                                      onTap: () {
+                                        isShowMA100 = !isShowMA100;
+                                        String script = "setMA100($isShowMA100);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
                                         height: 25,
                                         width: 100,
                                         decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
                                             border: Border.all(color: Colors.grey.shade300)),
                                         child: const Center(child: Text('MA100')),
                                       ),
                                     ),
                                     GestureDetector(
-                                      onTap: (){
-                                        String script = "addMA(200);";
+                                      onTap: () {
+                                        isShowMA200 = !isShowMA200;
+                                        String script = "setMA200($isShowMA200);";
                                         controller.runJavascript(script);
                                       },
                                       child: Container(
                                         height: 25,
                                         width: 100,
                                         decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(8)),
+                                            borderRadius:
+                                                const BorderRadius.all(Radius.circular(8)),
                                             border: Border.all(color: Colors.grey.shade300)),
                                         child: const Center(child: Text('MA200')),
                                       ),
@@ -345,8 +366,7 @@ class _ChartPageState extends State<ChartPage> {
                 }
               },
               onPageFinished: (url) {
-                String script = "removeStudies();";
-                controller.runJavascript(script);
+              
               },
               zoomEnabled: false,
             ),

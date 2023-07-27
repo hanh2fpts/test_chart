@@ -13,6 +13,17 @@
 		<script type="text/javascript">
 			var interval = 'D';
 			var widget;
+			/// danh sach cac study id su dung cho viecc them, xoa khoi chart
+			var volumeStudyId;
+			var rsiStudyId;
+			var bolStudyId;
+			var ma5StudyId;
+			var ma10StudyId;
+			var ma20StudyId;
+			var ma50StudyId;
+			var ma100StudyId;
+			var ma200StudyId;
+			/// thay doi khoang thoi gian
 			function changeResolution(resolution){
 				try {
 					console.info("set thoi gian "+resolution);
@@ -21,39 +32,45 @@
 					console.error("error set thoi gian " + error);
 				}
 			}
-			function removeStudies(){
-				//widget.activeChart().clearMarks();
-				//widget.activeChart().removeAllStudies();
-			}
-			function addVolumeLabel(isShow) {
-				//console.log("asssssssssssssssssssssssssssssssss"+isShow);
+			/// an hien volume
+			function setVolume(isShow) {
 				if(isShow){
 					widget.activeChart().createStudy(
-						'Volume', 
-						true, 
-						false, 
-					);
+						'Volume',
+						true,
+						false,
+					).then(function (id){
+						console.log('New study ID:', id);
+						volumeStudyId = id;
+					}).catch(function (error){
+						console.error('Error adding study:', error);
+					});
 				}
 				else{
-					widget.activeChart().removeAllStudies();
+					console.log('Remove study ID:', volumeStudyId);
+					widget.activeChart().removeEntity(volumeStudyId);
 				}
 			}
-
-			function addRSI(isShow) {
+			/// an hien RSI
+			function setRSI(isShow) {
 				if(isShow)
 				{
 					widget.activeChart().createStudy(
 					'Relative Strength Index', 
 					false, 
 					false,
-					);
+					).then(function (id) {
+						rsiStudyId = id;
+					}).catch(function (error){
+						console.error('Error adding study:', error);
+					});
 				}
 				else{
-					widget.activeChart().removeAllStudies();
+					widget.activeChart().removeEntity(rsiStudyId);
 				}
 			}
-
-			function addMA(value){
+			/// an hien cac chi so MA
+			function setMA(value){
 				widget.activeChart().createStudy(
 					'Moving Average',
 					true,
@@ -64,21 +81,158 @@
 					null
 				);
 			}
-
-			function addBollingerBands(isShow) {
+			/// an hien MA5
+			function setMA5(isShow){
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Moving Average',
+					true,
+					false,
+					{
+						'length': 5
+					},
+					null
+					).then(function(id){
+						ma5StudyId = id;
+					}).catch(function(error){
+						console.error('Error adding study:', error);
+					});
+				}
+				else{
+					widget.activeChart().removeEntity(ma5StudyId);
+				}
+				
+			}
+			/// an hien MA10
+			function setMA10(isShow){
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Moving Average',
+					true,
+					false,
+					{
+						'length': 10
+					},
+					null
+					).then(function(id){
+						ma10StudyId = id;
+					}).catch(function(error){
+						console.error('Error adding study:', error);
+					});
+				}
+				else{
+					widget.activeChart().removeEntity(ma10StudyId);
+				}
+			}
+			/// an hien MA20
+			function setMA20(isShow){
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Moving Average',
+					true,
+					false,
+					{
+						'length': 20
+					},
+					null
+					).then(function(id){
+						ma20StudyId = id;
+					}).catch(function(error){
+						console.error('Error adding study:', error);
+					});
+				}
+				else{
+					widget.activeChart().removeEntity(ma20StudyId);
+				}
+			}
+			/// an hien MA50
+			function setMA50(isShow){
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Moving Average',
+					true,
+					false,
+					{
+						'length': 50
+					},
+					null
+					).then(function(id){
+						ma50StudyId = id;
+					}).catch(function(error){
+						console.error('Error adding study:', error);
+					});
+				}
+				else{
+					widget.activeChart().removeEntity(ma50StudyId);
+				}
+			}
+			/// an hien MA100
+			function setMA100(isShow){
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Moving Average',
+					true,
+					false,
+					{
+						'length': 100
+					},
+					null
+					).then(function(id){
+						ma100StudyId = id;
+					}).catch(function(error){
+						console.error('Error adding study:', error);
+					});
+				}
+				else{
+					widget.activeChart().removeEntity(ma100StudyId);
+				}
+			}
+			/// an hien MA200
+			function setMA200(isShow){
+				if(isShow)
+				{
+					widget.activeChart().createStudy(
+					'Moving Average',
+					true,
+					false,
+					{
+						'length': 200
+					},
+					null
+					).then(function(id){
+						ma200StudyId = id;
+					}).catch(function(error){
+						console.error('Error adding study:', error);
+					});
+				}
+				else{
+					widget.activeChart().removeEntity(ma200StudyId);
+				}
+			}
+			/// an hien cac chi so Bol. Bands
+			function setBollingerBands(isShow) {
 				if(isShow)
 				{
 					widget.activeChart().createStudy(
 					'Bollinger Bands', 
 					true, 
 					false,
-					);
+					).then(function(id){
+						bolStudyId = id;
+					}).catch(function (error){
+						console.error('Error adding study:', error);
+					});
 				}
 				else{
-					widget.activeChart().removeAllStudies();
+					widget.activeChart().removeEntity(bolStudyId);
 				}
 			}
-
+			/// chuyen doi cac loai chart type
 			function changeChartType(chartType){
 				try {
 					console.info("set kieu chart "+chartType);
@@ -102,7 +256,7 @@
 					datafeedUrl = customDataUrl.startsWith('https://') ? customDataUrl : `https://${customDataUrl}`;
 				}
 
-				widget = new TradingView.widget({
+				widget = (window.tvWidget = new TradingView.widget({
 					fullscreen: true,
 					symbol: 'AAPL',
 					interval: interval,
@@ -113,7 +267,10 @@
 					locale: getParameterByName('lang') || "en",
 					enabled_features:[
 						"show_symbol_logos",
-						"show_symbol_logo_in_legend"
+						"show_symbol_logo_in_legend",
+						"show_zoom_and_move_buttons_on_touch",
+						"horz_touch_drag_scroll",
+						"vert_touch_drag_scroll"
 					],
 					disabled_features: [
 						"header_widget",
@@ -127,7 +284,7 @@
 						"header_fullscreen_button",
 						"header_indicators",
 						"legend_widget",
-						"chart_zoom"
+						//"chart_zoom"
 					],
 					preset: "mobile",
 					overrides: {
@@ -138,10 +295,16 @@
 						"mainSeriesProperties.style": 0,
 						"paneProperties.legendProperties.showVolume": true,
 					},
-				});
+				}));
 				widget.onChartReady(function (){
 					widget.activeChart().clearMarks();
 					widget.activeChart().removeAllStudies();
+					const chartContainer = document.querySelector('#tv_chart_container');
+
+					// Prevent default double-click behavior on the chart container
+					chartContainer.addEventListener('dblclick', function (event) {
+						event.preventDefault();
+					});
 				});
 			};
 
