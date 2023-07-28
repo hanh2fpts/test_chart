@@ -23,6 +23,23 @@
 			var ma50StudyId;
 			var ma100StudyId;
 			var ma200StudyId;
+			/// change theme chart
+			function changeTheme(isDark){
+				//const currentTheme = widget.getTheme();
+				//console.log('Current Theme:', currentTheme);
+				console.log("Current theme: "+isDark);
+				if(isDark)
+				{
+					widget.onChartReady(function (){
+						widget.changeTheme("dark");
+					});
+				}
+				else{
+					widget.onChartReady(function (){
+						widget.changeTheme("light");
+					});
+				}
+			}
 			/// thay doi khoang thoi gian
 			function changeResolution(resolution){
 				try {
@@ -295,7 +312,6 @@
 					],
 					preset: "mobile",
 					overrides: {
-						"paneProperties.background": "#222222",
 						"paneProperties.vertGridProperties.color": "#00000000",
 						"paneProperties.horzGridProperties.color": "#00000000",
 						"scalesProperties.textColor" : "#AAA",
@@ -306,12 +322,6 @@
 				widget.onChartReady(function (){
 					widget.activeChart().clearMarks();
 					widget.activeChart().removeAllStudies();
-					const chartContainer = document.querySelector('#tv_chart_container');
-
-					// Prevent default double-click behavior on the chart container
-					chartContainer.addEventListener('dblclick', function (event) {
-						event.preventDefault();
-					});
 				});
 			};
 

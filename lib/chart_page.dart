@@ -401,16 +401,20 @@ class _ChartPageState extends State<ChartPage> {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(3),
-                margin: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7), border: Border.all(color: Colors.grey)),
-                child: SvgPicture.asset(
-                  'assets/icons/icon_share.svg',
-                  height: 20,
-                  width: 20,
-                  color: Colors.grey.shade700,
+              GestureDetector(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      border: Border.all(color: Colors.grey)),
+                  child: SvgPicture.asset(
+                    'assets/icons/icon_share.svg',
+                    height: 20,
+                    width: 20,
+                    color: Colors.grey.shade700,
+                  ),
                 ),
               ),
             ],
@@ -430,7 +434,12 @@ class _ChartPageState extends State<ChartPage> {
                     print('on page started $url');
                   }
                 },
-                onPageFinished: (url) {},
+                onPageFinished: (url) {
+                  var isDark = Constant.isDark.value;
+                  String script = "changeTheme($isDark);";
+                  controller.runJavascript(script);
+                },
+                
                 zoomEnabled: false,
               ),
             ),
