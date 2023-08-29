@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +15,29 @@ class ChartPage extends StatefulWidget {
 class _ChartPageState extends State<ChartPage> {
   late WebViewController controller;
   int _currentSegment = 0;
+  @override
+  void initState() {
+    super.initState();
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {},
+          onPageStarted: (String url) {
+            if (kDebugMode) {
+              print('on page started $url');
+            }
+          },
+          onPageFinished: (String url) {
+            var isDark = Constant.isDark.value;
+            String script = "changeTheme($isDark);";
+            controller.runJavaScript(script);
+          },
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadRequest(Uri.parse('http://localhost:8888/assets/charting_library/mobile_black.html'));
+  }
 
   /// danh sách của kiểu Resolution
   final Map<int, Widget> _segments = {
@@ -72,6 +93,18 @@ class _ChartPageState extends State<ChartPage> {
       appBar: AppBar(
         title: const Text('Chart Page'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          Switch(
+            onChanged: (value) {
+              setState(() {
+                Constant.isDark.value = value;
+                String script = "changeTheme($value);";
+                controller.runJavaScript(script);
+              });
+            },
+            value: Constant.isDark.value,
+          )
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -98,7 +131,7 @@ class _ChartPageState extends State<ChartPage> {
                     chartType = 0;
                   }
                   String script = "changeChartType($chartType);";
-                  controller.runJavascript(script);
+                  controller.runJavaScript(script);
                   setState(() {});
                 },
                 child: Container(
@@ -143,7 +176,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowVolume.value = !isShowVolume.value;
                                         controller
-                                            .runJavascript("setVolume(${isShowVolume.value});");
+                                            .runJavaScript("setVolume(${isShowVolume.value});");
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowVolume,
@@ -168,7 +201,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowRsi.value = !isShowRsi.value;
                                         String script = "setRSI(${isShowRsi.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowRsi,
@@ -191,7 +224,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowBol.value = !isShowBol.value;
                                         String script = "setBollingerBands(${isShowBol.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowBol,
@@ -221,7 +254,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowMA5.value = !isShowMA5.value;
                                         String script = "setMA5(${isShowMA5.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowMA5,
@@ -244,7 +277,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowMA10.value = !isShowMA10.value;
                                         String script = "setMA10(${isShowMA10.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowMA10,
@@ -266,7 +299,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowMA20.value = !isShowMA20.value;
                                         String script = "setMA20(${isShowMA20.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowMA20,
@@ -296,7 +329,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowMA50.value = !isShowMA50.value;
                                         String script = "setMA50(${isShowMA50.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowMA50,
@@ -319,7 +352,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowMA100.value = !isShowMA100.value;
                                         String script = "setMA100(${isShowMA100.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowMA100,
@@ -341,7 +374,7 @@ class _ChartPageState extends State<ChartPage> {
                                       onTap: () {
                                         isShowMA200.value = !isShowMA200.value;
                                         String script = "setMA200(${isShowMA200.value});";
-                                        controller.runJavascript(script);
+                                        controller.runJavaScript(script);
                                       },
                                       child: ValueListenableBuilder(
                                         valueListenable: isShowMA200,
@@ -423,24 +456,8 @@ class _ChartPageState extends State<ChartPage> {
             valueListenable: Constant.chartHeight,
             builder: (context, value, child) => SizedBox(
               height: value,
-              child: WebView(
-                javascriptMode: JavascriptMode.unrestricted,
-                initialUrl: 'http://localhost:8888/assets/charting_library/mobile_black.html',
-                onWebViewCreated: (controller) {
-                  this.controller = controller;
-                },
-                onPageStarted: (url) {
-                  if (kDebugMode) {
-                    print('on page started $url');
-                  }
-                },
-                onPageFinished: (url) {
-                  var isDark = Constant.isDark.value;
-                  String script = "changeTheme($isDark);";
-                  controller.runJavascript(script);
-                },
-                
-                zoomEnabled: false,
+              child: WebViewWidget(
+                controller: controller,
               ),
             ),
           ),
@@ -480,7 +497,7 @@ class _ChartPageState extends State<ChartPage> {
                     script = "changeResolution('D');";
                     break;
                 }
-                controller.runJavascript(script);
+                controller.runJavaScript(script);
               });
             },
           ),
@@ -512,17 +529,19 @@ class _SettingChartWidgetState extends State<SettingChartWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Chiều cao chart:'),
-              SizedBox(
-                width: 280,
-                child: Slider(
-                    min: 100,
-                    max: 500,
-                    value: Constant.chartHeight.value,
-                    onChanged: (value) {
-                      setState(() {
-                        Constant.chartHeight.value = value;
-                      });
-                    }),
+              Expanded(
+                child: SizedBox(
+                  width: 280,
+                  child: Slider(
+                      min: 100,
+                      max: 500,
+                      value: Constant.chartHeight.value,
+                      onChanged: (value) {
+                        setState(() {
+                          Constant.chartHeight.value = value;
+                        });
+                      }),
+                ),
               )
             ],
           )
