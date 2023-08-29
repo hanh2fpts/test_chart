@@ -1,0 +1,1 @@
+test custom chart tradingview cho phu hop voi man hinh dien thoai :v 
