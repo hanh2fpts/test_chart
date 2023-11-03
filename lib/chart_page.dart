@@ -20,6 +20,12 @@ class _ChartPageState extends State<ChartPage> {
     super.initState();
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'Print',
+        onMessageReceived: (p0) {
+          print(p0.message);
+        },
+      )
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {},
@@ -36,7 +42,8 @@ class _ChartPageState extends State<ChartPage> {
           onWebResourceError: (WebResourceError error) {},
         ),
       )
-      ..loadRequest(Uri.parse('http://localhost:8888/assets/charting_library/mobile_black.html'));
+      //..loadRequest(Uri.parse('http://localhost:8888/assets/charting_library/mobile_black.html'));
+      ..loadRequest(Uri.parse('http://localhost:8888/assets/charting_library/test1.html'));
   }
 
   /// danh sách của kiểu Resolution
@@ -96,11 +103,8 @@ class _ChartPageState extends State<ChartPage> {
         actions: [
           Switch(
             onChanged: (value) {
-              setState(() {
-                Constant.isDark.value = value;
-                String script = "changeTheme($value);";
-                controller.runJavaScript(script);
-              });
+              String script = "alert();";
+              controller.runJavaScript(script);
             },
             value: Constant.isDark.value,
           )
